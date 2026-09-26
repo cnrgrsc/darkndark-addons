@@ -1,5 +1,6 @@
 local function step(name, fn)
   local ok, e = pcall(fn)
+  if not ok then FAILED = (FAILED or 0) + 1 end
   io_write((ok and "PASS " or "FAIL ") .. name .. (ok and "" or ("  -> " .. tostring(e))))
 end
 local D = NS.Display

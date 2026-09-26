@@ -1,43 +1,56 @@
-# Darkndark
+# Darkndark Addons
 
-**A rotation and combo assistant for every class and spec, built for Midnight's addon rules.**
+Two World of Warcraft: **Midnight** (12.x) addons for every class and spec.
 
-Midnight's *Secret Values* ended the old rotation helpers. Darkndark works inside the new rules. It starts from Blizzard's Assisted Combat suggestion and adds its own layer on top, using only the combat information addons can still read: whether an ability is off cooldown, usable, in range, or procced.
+| Addon | What it does | Command |
+|---|---|---|
+| **[Darkndark](Darkndark/)** | Rotation helper built within Midnight's addon rules. It shows the next ability to press and the ones after it, with your keybinds. It also has major cooldown and defensive bars and an interrupt helper, and every panel can be moved and resized. | `/dnd` |
+| **[Darkndark Talents](DarkndarkTalents/)** | Talent builds that top players use for Mythic+, raid, Solo Shuffle/1v1, 2v2, 3v3, Blitz and RBG. It includes a build chooser for when you enter content, a Top Players browser, chat sharing, bar and keybind layout, and a gear and stat check. | `/dndt` |
 
-## Features
-- **Main recommendation.** A large icon for the next ability plus up to 4 predicted abilities after it. Procs are moved to the front.
-- **Works for every class and spec** out of the box. Spec profiles can add extra priority rules.
-- **Keybinds on icons.** Detects keys from Blizzard bars, Bartender4, ElvUI, Dominos and macros.
-- **Cooldown bar.** Finds each spec's major cooldowns on its own.
-- **Hold cooldowns mode.** Major cooldowns stay off the main icon and glow on their bar when it is time, so you choose when to press them.
-- **Defensives bar.** Shows your personal defensives and whether each one is ready.
-- **Interrupt helper.** Appears when your target casts and glows when your interrupt is ready, with an optional sound.
-- **Fully movable and resizable.** Type `/dnd unlock`. Drag a panel to move it; use the mouse wheel or the corner grip to resize it.
-- **Masque support** and a settings panel (Esc > Options > AddOns > Darkndark).
-- English and Turkish.
+Both addons only show information and change things when you click. They never press abilities for you.
 
-## Commands
-| Command | |
-|---|---|
-| `/dnd unlock` / `/dnd lock` | Move and resize panels |
-| `/dnd config` | Open settings |
-| `/dnd reset` | Reset positions and sizes |
-| `/dnd scale 1.2` | Scale the main panel |
-| `/dnd toggle` | Turn the addon on or off |
-| `/dnd probe` | Show a report of what combat data is readable right now (for bug reports) |
-| `/dnd debug` | Show where each recommendation came from |
+- Landing page: [`docs/index.html`](docs/index.html)
+- CurseForge descriptions: [`docs/curseforge/`](docs/curseforge/)
+- Roadmap and design notes: [`PLAN.md`](PLAN.md)
+- Changelogs: [`CHANGELOG.md`](CHANGELOG.md) (Darkndark) and [`CHANGELOG-talents.md`](CHANGELOG-talents.md) (Darkndark Talents)
 
-## Fair play
-Darkndark never presses anything for you. It only shows information.
+## Repository layout
 
-## Writing a spec profile
-See `Profiles/Registry.lua`. Profiles are plain priority lists:
-```lua
-Darkndark:RegisterProfile(260, {
-    name = "Outlaw",
-    priority = {
-        { spell = 185763, when = function(s) return s.proc(185763) end },
-        { spell = 2098,   when = function(s) return s.powerAtLeast(Enum.PowerType.ComboPoints, 5) end },
-    },
-})
 ```
+Darkndark/            rotation helper addon
+DarkndarkTalents/     talent builds addon (Data/Builds.lua is generated)
+tools/
+  update-builds.mjs   regenerates talent data from murlok.io + raider.io
+  package.ps1         builds CurseForge-ready zips into .release/
+tests/                mock WoW API test harness (fengari)
+docs/                 landing page and CurseForge texts
+.github/workflows/    CI tests and CurseForge release
+install.ps1           links the addons into your WoW AddOns folder
+```
+
+## Development
+
+Requirements: Node.js 18 or later. PowerShell is only needed for the Windows helper scripts.
+
+```powershell
+# Link both addons into WoW (junctions), then /reload in game after edits
+.\install.ps1
+
+# Run the test suites (both addons)
+cd tests; npm install; npm test
+
+# Refresh talent build data (cached; the first full run takes about an hour)
+node tools/update-builds.mjs                      # all specs
+node tools/update-builds.mjs paladin/retribution  # one spec
+
+# Build zips for manual CurseForge upload
+.\tools\package.ps1 -Version 0.2.0
+```
+
+## Releasing
+
+Push a version tag (for example `git tag v0.2.0 && git push --tags`). The release workflow runs the tests and packages both addons with the BigWigs packager. It uploads them to CurseForge once the project IDs are in the TOC files and a `CF_API_KEY` repository secret exists.
+
+## Data sources
+
+Talent builds, top player rankings and stat priorities come from [murlok.io](https://murlok.io) and the [raider.io API](https://raider.io/api). The addons are not affiliated with Blizzard Entertainment.

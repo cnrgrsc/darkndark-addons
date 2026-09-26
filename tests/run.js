@@ -22,3 +22,4 @@ for (const f of toc) {
 }
 console.log('all files loaded');
 run(scenario, 'scenario');
+run('if FAILED then error(FAILED .. " test(s) failed") end', 'result');
