@@ -1,0 +1,22 @@
+package-as: Darkndark
+
+# The addon lives in the Darkndark/ subfolder of this repo; lift it to the zip root.
+move-folders:
+  Darkndark/Darkndark: Darkndark
+
+ignore:
+  - PLAN.md
+  - install.ps1
+  - .github
+  - tests
+  - .gitignore
+  - README.md
+  - README-talents.md
+  - tools
+  - docs
+  - DarkndarkTalents
+  - .pkgmeta-talents
+
+manual-changelog: CHANGELOG.md
+
+enable-nolib-creation: no

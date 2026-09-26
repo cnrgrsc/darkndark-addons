@@ -1,0 +1,10 @@
+{
+  "name": "darkndark-tests",
+  "private": true,
+  "scripts": {
+    "test": "node run.js ../Darkndark scenario.lua && node run.js ../DarkndarkTalents scenario-talents.lua stub-talents.lua"
+  },
+  "dependencies": {
+    "fengari": "^0.1.4"
+  }
+}

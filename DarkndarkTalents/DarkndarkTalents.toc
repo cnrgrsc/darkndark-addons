@@ -1,0 +1,24 @@
+## Interface: 120005, 120007, 120100, 120105
+## Title: |cffa335eeDarkndark|r Talents
+## Notes: Best talent builds for M+, raid and every PvP bracket (from top players), one-click switching, and gear/stat checks.
+## Notes-trTR: Top oyunculardan M+, raid ve tüm PvP bracket'leri için en iyi talent build'leri, tek tıkla geçiş ve gear/stat kontrolü.
+## Author: cnrgrsc
+## Version: @project-version@
+## IconTexture: Interface\Icons\Ability_Marksmanship
+## Category: Combat
+## SavedVariables: DarkndarkTalentsDB
+## AddonCompartmentFunc: DarkndarkTalents_OnAddonCompartmentClick
+
+Libs\DarkndarkMinimap.lua
+Locales.lua
+Core.lua
+Data\Builds.lua
+Data\ClassSpells.lua
+Loadout.lua
+Share.lua
+Context.lua
+Gear.lua
+ActionBars.lua
+UI\Window.lua
+UI\Prompt.lua
+UI\Minimap.lua

@@ -1,0 +1,26 @@
+## Interface: 120005, 120007, 120100, 120105
+## Title: |cffa335eeDarkndark|r
+## Notes: Rotation & combo assistant for every class and spec, built for Midnight's addon rules.
+## Notes-trTR: Midnight kurallarına uygun, her class ve spec için rotasyon/combo asistanı.
+## Author: cnrgrsc
+## Version: @project-version@
+## IconTexture: Interface\Icons\Ability_DualWield
+## Category: Combat
+## SavedVariables: DarkndarkDB
+## OptionalDeps: Masque
+## AddonCompartmentFunc: Darkndark_OnAddonCompartmentClick
+
+Locales.lua
+Core.lua
+Util.lua
+Spells.lua
+Keybinds.lua
+Profiles\Registry.lua
+Engine.lua
+Interrupt.lua
+Cooldowns.lua
+UI\Icon.lua
+UI\Skin.lua
+UI\Display.lua
+UI\Options.lua
+Diagnostics.lua

@@ -1,0 +1,562 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Darkndark Addons</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+  /* Deliberately single-theme: a "Midnight" night-sky UI, painted explicitly. */
+  :root {
+    color-scheme: dark;
+    --ground: #0c0a13;
+    --ground-2: #110e1b;
+    --surface: #17131f;
+    --surface-2: #1e1829;
+    --line: #2d2540;
+    --text: #ece6f6;
+    --muted: #a097b4;
+    --faint: #6f6784;
+    --epic: #a335ee;
+    --epic-soft: #c68bff;
+    --epic-deep: #3a1b5c;
+    --legendary: #ff8000;
+    --rare: #3b8cff;
+    --ready: #3ee06a;
+    --danger: #ff5a5a;
+    --display: "Cinzel", "Trajan Pro", Georgia, serif;
+    --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0;
+    background:
+      radial-gradient(1200px 600px at 70% -10%, rgba(163, 53, 238, 0.18), transparent 60%),
+      radial-gradient(900px 500px at -10% 30%, rgba(59, 140, 255, 0.08), transparent 60%),
+      var(--ground);
+    color: var(--text);
+    font: 16px/1.6 var(--body);
+    padding-inline: 20px;
+    padding-block: 0;
+  }
+  a { color: var(--epic-soft); }
+  :focus-visible { outline: 2px solid var(--epic-soft); outline-offset: 3px; border-radius: 4px; }
+  .wrap { max-width: 1120px; margin-inline: auto; }
+
+  /* ---------- Top bar ---------- */
+  .top {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    padding-block: 22px;
+  }
+  .brand { font-family: var(--display); font-weight: 700; letter-spacing: 0.06em; font-size: 1.15rem; color: var(--epic-soft); text-decoration: none; }
+  .top nav { display: flex; gap: 22px; flex-wrap: wrap; }
+  .top nav a { color: var(--muted); text-decoration: none; font-size: 0.92rem; }
+  .top nav a:hover { color: var(--text); }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 48px; align-items: center;
+    padding-block: 40px 72px;
+  }
+  .eyebrow {
+    font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--legendary);
+  }
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2.3rem, 5.2vw, 3.9rem); line-height: 1.05; letter-spacing: 0.01em; margin-top: 14px; }
+  h1 em { font-style: normal; color: var(--epic-soft); }
+  .lede { color: var(--muted); font-size: 1.1rem; max-width: 34em; margin: 20px 0 28px; }
+  .ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 12px 20px; border-radius: 8px;
+    font-weight: 600; text-decoration: none; font-size: 0.98rem; border: 1px solid transparent;
+  }
+  .btn-primary { background: var(--epic); color: #fff; box-shadow: 0 8px 30px -8px rgba(163, 53, 238, 0.7); }
+  .btn-primary:hover { background: #b24ff5; }
+  .btn-ghost { border-color: var(--line); color: var(--text); background: rgba(255, 255, 255, 0.02); }
+  .btn-ghost:hover { border-color: var(--epic); }
+  .hero-note { margin-top: 18px; color: var(--faint); font-size: 0.86rem; }
+
+  /* ---------- HUD mock ---------- */
+  .stage {
+    position: relative; border-radius: 16px; padding: 34px 28px 28px;
+    background:
+      linear-gradient(180deg, rgba(12, 10, 19, 0.2), rgba(12, 10, 19, 0.85)),
+      radial-gradient(500px 300px at 50% 0%, rgba(163, 53, 238, 0.25), transparent 70%),
+      var(--ground-2);
+    border: 1px solid var(--line);
+    box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8);
+  }
+  .stage-label {
+    position: absolute; top: 12px; left: 16px; font-family: var(--mono); font-size: 0.7rem;
+    color: var(--faint); letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .hud { display: flex; align-items: center; gap: 10px; justify-content: center; margin-top: 8px; }
+  .hud-row { display: flex; gap: 8px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .icon {
+    --size: 64px; --c1: #6b2fb3; --c2: #2a1447;
+    position: relative; width: var(--size); height: var(--size); flex: none;
+    border-radius: 6px; border: 1px solid #000;
+    background: radial-gradient(circle at 35% 30%, var(--c1), var(--c2));
+    display: grid; place-items: center; overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+  .icon svg { width: 58%; height: 58%; fill: rgba(255, 244, 220, 0.92); filter: drop-shadow(0 2px 2px rgba(0,0,0,.6)); }
+  .icon .key {
+    position: absolute; top: 3px; right: 5px; font: 700 0.82rem/1 var(--mono); color: #fff;
+    text-shadow: 0 0 3px #000, 0 0 3px #000;
+  }
+  .icon.big { --size: 92px; }
+  .icon.big .key { font-size: 1.05rem; }
+  .icon.small { --size: 44px; }
+  .icon.small .key { font-size: 0.66rem; }
+  .icon.dim { filter: grayscale(0.85) brightness(0.65); }
+  .icon .swipe {
+    position: absolute; inset: 0; background: conic-gradient(rgba(0,0,0,.62) var(--p, 0%), transparent 0);
+  }
+  .icon.glow { box-shadow: 0 0 0 2px #ffd34d, 0 0 18px 4px rgba(255, 196, 64, 0.55); animation: pulse 0.9s ease-in-out infinite alternate; }
+  @keyframes pulse { from { box-shadow: 0 0 0 2px #ffd34d, 0 0 10px 2px rgba(255,196,64,.35); } to { box-shadow: 0 0 0 2px #ffe58a, 0 0 22px 6px rgba(255,196,64,.7); } }
+  .hud-caption { display: flex; justify-content: center; gap: 18px; margin-top: 14px; flex-wrap: wrap; }
+  .hud-caption span { font-size: 0.78rem; color: var(--muted); display: inline-flex; align-items: center; gap: 6px; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .now-casting { text-align: center; margin-top: 14px; font-family: var(--mono); font-size: 0.8rem; color: var(--epic-soft); min-height: 1.3em; }
+
+  /* ---------- Sections ---------- */
+  section { padding-block: 72px; border-top: 1px solid var(--line); }
+  .section-head { display: grid; grid-template-columns: 1fr 1.3fr; gap: 40px; align-items: end; margin-bottom: 40px; }
+  h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); line-height: 1.1; }
+  .section-head p { color: var(--muted); margin: 0; max-width: 38em; }
+  .tag {
+    display: inline-block; font: 600 0.72rem/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 6px 9px; border-radius: 4px; margin-bottom: 14px;
+  }
+  .tag-epic { color: var(--epic-soft); background: rgba(163, 53, 238, 0.14); border: 1px solid rgba(163, 53, 238, 0.35); }
+  .tag-legendary { color: #ffb066; background: rgba(255, 128, 0, 0.1); border: 1px solid rgba(255, 128, 0, 0.35); }
+
+  .features { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .feature { background: var(--surface); padding: 24px 22px; }
+  .feature h3 { font-family: var(--body); font-size: 1.02rem; font-weight: 700; margin-bottom: 8px; letter-spacing: 0; }
+  .feature p { margin: 0; color: var(--muted); font-size: 0.94rem; }
+  .feature .k { font-family: var(--mono); font-size: 0.84rem; color: var(--text); background: var(--surface-2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
+
+  /* Rules panel */
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 28px; }
+  .rules-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; }
+  .rules-card h3 { font-family: var(--body); font-size: 0.95rem; letter-spacing: 0; margin-bottom: 12px; }
+  .rules-card ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .rules-card li { display: flex; gap: 10px; align-items: baseline; color: var(--muted); font-size: 0.93rem; }
+  .rules-card li b { color: var(--text); font-weight: 600; }
+  .mark { font-family: var(--mono); font-size: 0.8rem; width: 1.2em; flex: none; }
+  .ok { color: var(--ready); } .no { color: var(--danger); }
+
+  /* ---------- Talents window mock ---------- */
+  .talents-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 32px; align-items: start; }
+  .window { background: #0e0b16; border: 1px solid rgba(163, 53, 238, 0.7); border-radius: 6px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(0,0,0,.8); }
+  .window-title { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .window-title b { color: var(--epic-soft); font-weight: 700; }
+  .window-title span { font-size: 0.8rem; color: var(--muted); }
+  .spec { padding: 12px 14px; display: flex; gap: 10px; align-items: center; border-bottom: 1px solid var(--line); }
+  .spec .icon { --size: 34px; --c1: #f5c542; --c2: #7a4b0c; }
+  .spec strong { display: block; }
+  .spec small { color: #7fd99a; font-size: 0.78rem; }
+  .rows { display: grid; }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 10px 14px; border-bottom: 1px solid rgba(45, 37, 64, 0.6); }
+  .row:nth-child(even) { background: rgba(255,255,255,0.02); }
+  .row.here { background: rgba(163, 53, 238, 0.18); }
+  .row-name { color: #ffd100; font-weight: 600; font-size: 0.95rem; }
+  .row-name .here-pill { color: var(--ready); font-weight: 500; font-size: 0.78rem; margin-left: 6px; }
+  .row-meta { font-size: 0.8rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 2px; }
+  .row-meta .hero-name { color: var(--text); }
+  .pill { font-family: var(--mono); font-size: 0.72rem; padding: 1px 6px; border-radius: 4px; border: 1px solid currentColor; }
+  .pill.good { color: var(--ready); } .pill.mid { color: #ffd100; } .pill.bad { color: var(--danger); }
+  .share { display: inline-flex; align-items: center; gap: 6px; }
+  .share i { display: inline-block; height: 5px; width: 60px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .share i::after { content: ""; display: block; height: 100%; width: var(--w); background: var(--epic); }
+  .row-actions { display: flex; gap: 6px; }
+  .mini-btn { font: 600 0.78rem/1 var(--body); padding: 7px 10px; border-radius: 4px; border: 1px solid #5a1d1d; background: linear-gradient(#8a1c1c, #5b0f0f); color: #ffd100; cursor: pointer; }
+  .mini-btn.alt { background: linear-gradient(#3a2d50, #231a33); border-color: var(--line); color: var(--text); }
+  .mini-btn:hover { filter: brightness(1.15); }
+  .mini-btn[aria-pressed="true"] { background: linear-gradient(#1e6b36, #104021); border-color: #1e6b36; color: #d7ffe2; }
+  .window-foot { padding: 10px 14px; font-size: 0.75rem; color: var(--faint); font-family: var(--mono); }
+  .example-note { font-size: 0.8rem; color: var(--faint); margin-top: 10px; }
+
+  .talent-points { display: grid; gap: 18px; }
+  .point h3 { font-family: var(--body); font-size: 1.02rem; letter-spacing: 0; margin-bottom: 6px; }
+  .point p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+
+  /* ---------- Keyboard ---------- */
+  .kb-wrap { margin-top: 56px; display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: center; }
+  .kb-scroll { overflow-x: auto; padding-bottom: 6px; }
+  .kb { display: grid; gap: 8px; min-width: 420px; }
+  .kb-row { display: flex; gap: 8px; }
+  .kb-row:nth-child(2) { padding-left: 22px; }
+  .kb-row:nth-child(3) { padding-left: 36px; }
+  .kb-row:nth-child(4) { padding-left: 54px; }
+  .cap {
+    width: 48px; height: 48px; border-radius: 7px; display: grid; place-items: center;
+    font: 600 0.95rem/1 var(--mono); color: var(--faint);
+    background: linear-gradient(#1b1626, #120e1a); border: 1px solid var(--line);
+    box-shadow: 0 3px 0 #07060b;
+  }
+  .cap.core { color: #fff; border-color: var(--epic); background: linear-gradient(#4a2175, #2b1246); }
+  .cap.util { color: #fff; border-color: var(--rare); background: linear-gradient(#1c3f75, #102546); }
+  .cap.kick { color: #fff; border-color: var(--legendary); background: linear-gradient(#7a3d00, #4a2400); }
+  .cap.move { color: #4d4660; border-style: dashed; }
+  .legend { display: grid; gap: 12px; }
+  .legend-item { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; }
+  .legend-item .sw { width: 26px; height: 26px; border-radius: 6px; border: 1px solid; }
+  .legend-item b { display: block; font-size: 0.95rem; }
+  .legend-item span { color: var(--muted); font-size: 0.9rem; }
+  .legend-item code { font-family: var(--mono); font-size: 0.84rem; color: var(--text); }
+
+  /* ---------- Commands ---------- */
+  .cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .cmd-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .cmd-card h3 { font-family: var(--body); letter-spacing: 0; font-size: 1rem; padding: 16px 18px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+  .cmd-card h3 small { font-weight: 500; color: var(--faint); font-size: 0.8rem; }
+  .cmd { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; padding: 11px 18px; border-bottom: 1px solid rgba(45,37,64,.6); }
+  .cmd:last-child { border-bottom: 0; }
+  .cmd code { font-family: var(--mono); font-size: 0.88rem; color: var(--epic-soft); white-space: nowrap; }
+  .cmd span { color: var(--muted); font-size: 0.9rem; }
+  .copy { font: 500 0.72rem/1 var(--mono); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 4px; padding: 5px 8px; cursor: pointer; }
+  .copy:hover { color: var(--text); border-color: var(--epic); }
+
+  /* ---------- Get ---------- */
+  .get { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .get-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; background: linear-gradient(160deg, rgba(163,53,238,.12), transparent 55%), var(--surface); }
+  .get-card h3 { font-size: 1.5rem; margin-bottom: 6px; }
+  .get-card p { color: var(--muted); margin: 0 0 18px; }
+  .get-card ol { margin: 0 0 20px; padding-left: 1.2em; color: var(--muted); font-size: 0.93rem; display: grid; gap: 4px; }
+
+  footer { border-top: 1px solid var(--line); padding-block: 28px 40px; color: var(--faint); font-size: 0.85rem; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 900px) {
+    .hero, .section-head, .talents-grid, .kb-wrap, .rules, .cmd-grid, .get { grid-template-columns: 1fr; }
+    .features { grid-template-columns: 1fr 1fr; }
+    .top nav { display: none; }
+  }
+  @media (max-width: 560px) {
+    .features { grid-template-columns: 1fr; }
+    .icon.big { --size: 76px; }
+    .icon { --size: 54px; }
+    .row { grid-template-columns: 1fr; }
+    .cmd { grid-template-columns: 1fr auto; }
+    .cmd span { grid-column: 1 / -1; grid-row: 2; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .icon.glow { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="g-hammer" viewBox="0 0 24 24"><path d="M3 5.5 8.5 0l4 4-2 2 2.2 2.2-1.4 1.4L9.1 7.4l-2 2zM12 10.6l1.4-1.4 9.2 9.2a2 2 0 0 1-2.8 2.8z"/></symbol>
+    <symbol id="g-sword" viewBox="0 0 24 24"><path d="M21 2v4.5L10.8 16.7l1.4 1.4-1.4 1.4-2.1-2.1-3.3 3.3a1.5 1.5 0 0 1-2.1-2.1l3.3-3.3-2.1-2.1 1.4-1.4 1.4 1.4L17.5 3z"/></symbol>
+    <symbol id="g-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M11 0h2v4h-2zM11 20h2v4h-2zM0 11h4v2H0zM20 11h4v2h-4zM3.5 5 5 3.5 7.8 6.3 6.3 7.8zM16.2 17.7l1.5-1.5 2.8 2.8-1.5 1.5zM3.5 19l2.8-2.8 1.5 1.5L5 20.5zM16.2 6.3 19 3.5 20.5 5l-2.8 2.8z"/></symbol>
+    <symbol id="g-wave" viewBox="0 0 24 24"><path d="M2 14c3-6 6-6 9 0s6 6 9 0v4c-3 6-6 6-9 0s-6-6-9 0z"/><path d="M6 4h12l-6 7z"/></symbol>
+    <symbol id="g-shield" viewBox="0 0 24 24"><path d="M12 1 3 5v6c0 5.5 3.8 10.7 9 12 5.2-1.3 9-6.5 9-12V5z"/></symbol>
+    <symbol id="g-wings" viewBox="0 0 24 24"><path d="M12 6c-2-4-7-5-11-3 3 1 4 3 4 5-2 0-3 1-4 2 3 0 5 1 6 3 1-2 3-4 5-4zM12 6c2-4 7-5 11-3-3 1-4 3-4 5 2 0 3 1 4 2-3 0-5 1-6 3-1-2-3-4-5-4z"/><circle cx="12" cy="15" r="3"/></symbol>
+    <symbol id="g-fist" viewBox="0 0 24 24"><path d="M6 8a2 2 0 0 1 4 0V6a2 2 0 0 1 4 0v1a2 2 0 0 1 4 0v5a2 2 0 0 1 3 1.7V16a8 8 0 0 1-8 8h-2a7 7 0 0 1-7-7V9a2 2 0 0 1 2-1z"/></symbol>
+    <symbol id="g-bolt" viewBox="0 0 24 24"><path d="M14 0 3 14h7l-2 10 11-14h-7z"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="top">
+    <a class="brand" href="#top">DARKNDARK</a>
+    <nav aria-label="Sections">
+      <a href="#rotation">Rotation</a>
+      <a href="#talents">Talents</a>
+      <a href="#commands">Commands</a>
+      <a href="#get">Download</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- ================= HERO ================= -->
+    <div class="hero">
+      <div>
+        <div class="eyebrow">World of Warcraft · Midnight 12.x</div>
+        <h1>Press the right button. <em>Play the right build.</em></h1>
+        <p class="lede">Two addons for every class and spec. <strong>Darkndark</strong> shows the next ability to press, and <strong>Darkndark Talents</strong> sets you up with the build top players use in your content: talents, action bars and keybinds, in one click.</p>
+        <div class="ctas">
+          <a class="btn btn-primary" href="#get">Get the addons</a>
+          <a class="btn btn-ghost" href="#rotation">See how it works</a>
+        </div>
+        <p class="hero-note">Free · Every class &amp; spec · Blizzard bars, ElvUI, Bartender4 and Dominos</p>
+      </div>
+
+      <div class="stage" aria-label="Animated preview of the Darkndark rotation display">
+        <div class="stage-label">In-game preview · illustration</div>
+        <div class="hud">
+          <div class="icon big" id="hud-main"><svg><use href="#g-hammer"/></svg><span class="key">2</span><div class="swipe" id="hud-swipe"></div></div>
+          <div class="icon" id="hud-q1"><svg><use href="#g-sword"/></svg><span class="key">E</span></div>
+          <div class="icon" id="hud-q2"><svg><use href="#g-wave"/></svg><span class="key">4</span></div>
+        </div>
+        <div class="now-casting" id="hud-name" aria-live="polite">Next: Blade of Justice</div>
+        <div class="hud-row" aria-label="Cooldown and defensive bars">
+          <div class="icon small glow" style="--c1:#ffcf4a;--c2:#8a4b00"><svg><use href="#g-wings"/></svg><span class="key">S1</span></div>
+          <div class="icon small dim" style="--c1:#ffd76b;--c2:#7a5a10"><svg><use href="#g-sun"/></svg><span class="key">S2</span><div class="swipe" style="--p:64%"></div></div>
+          <div class="icon small" style="--c1:#7fb6ff;--c2:#1a3a78"><svg><use href="#g-shield"/></svg><span class="key">C1</span></div>
+          <div class="icon small" style="--c1:#ff9a3d;--c2:#6b2a00"><svg><use href="#g-fist"/></svg><span class="key">G</span></div>
+        </div>
+        <div class="hud-caption">
+          <span><i class="dot" style="background:#ffd34d"></i>Glowing: use it now</span>
+          <span><i class="dot" style="background:#6f6784"></i>Grey: on cooldown</span>
+          <span><i class="dot" style="background:var(--epic)"></i>Keys read from your bars</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= ROTATION ================= -->
+    <section id="rotation" aria-labelledby="rotation-title">
+      <div class="section-head">
+        <div>
+          <span class="tag tag-epic">Addon 1 · Darkndark</span>
+          <h2 id="rotation-title">A rotation helper that plays by Midnight's rules</h2>
+        </div>
+        <p>Midnight's Secret Values ended the old rotation helpers. Darkndark starts from Blizzard's Assisted Combat and adds its own layer on top, using only what addons can still read: is a spell ready, usable, in range or procced. Nothing is ever pressed for you.</p>
+      </div>
+
+      <div class="features">
+        <div class="feature"><h3>Next ability, plus what follows</h3><p>A big icon for the next ability to press and up to four predicted abilities after it, with procs moved to the front.</p></div>
+        <div class="feature"><h3>Your keybinds on every icon</h3><p>Read from Blizzard bars, ElvUI, Bartender4, Dominos and your macros, so you see the key to press, not just the spell.</p></div>
+        <div class="feature"><h3>Cooldowns, handled your way</h3><p>Finds your spec's major cooldowns automatically. With “Hold cooldowns”, they glow on their own bar and you decide when to use them.</p></div>
+        <div class="feature"><h3>Defensives at a glance</h3><p>A separate bar for your personal defensives, greyed out while they're on cooldown.</p></div>
+        <div class="feature"><h3>Never miss a kick</h3><p>An interrupt icon appears when your target starts casting and glows when your kick is ready, with an optional sound.</p></div>
+        <div class="feature"><h3>Your screen, your layout</h3><p>Type <span class="k">/dnd unlock</span>, then drag any panel. Use the mouse wheel or the corner grip to resize it. Masque skins are supported.</p></div>
+      </div>
+
+      <div class="rules">
+        <div class="rules-card">
+          <h3>What Midnight still lets addons read</h3>
+          <ul>
+            <li><span class="mark ok">✓</span><span><b>Assisted Combat suggestion</b>: Blizzard's own pick, for every spec</span></li>
+            <li><span class="mark ok">✓</span><span><b>Ready or not</b>: whether a cooldown is active (the exact time left is hidden)</span></li>
+            <li><span class="mark ok">✓</span><span><b>Usable, in range, procced</b>: resources, distance, spell glows</span></li>
+            <li><span class="mark no">✕</span><span><b>Combat log</b>: removed for addons in 12.0</span></li>
+          </ul>
+        </div>
+        <div class="rules-card">
+          <h3>Fair play</h3>
+          <ul>
+            <li><span class="mark ok">✓</span><span>Shows information only; <b>you press every button</b></span></li>
+            <li><span class="mark ok">✓</span><span>Every combat read is secret-safe, so no Lua errors when data is restricted</span></li>
+            <li><span class="mark ok">✓</span><span><span class="k" style="font-family:var(--mono);font-size:.84rem">/dnd probe</span> reports exactly what's readable where you are</span></li>
+            <li><span class="mark no">✕</span><span>No automation, no unlockers, ever</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TALENTS ================= -->
+    <section id="talents" aria-labelledby="talents-title">
+      <div class="section-head">
+        <div>
+          <span class="tag tag-legendary">Addon 2 · Darkndark Talents</span>
+          <h2 id="talents-title">The build top players run, for the content you're in</h2>
+        </div>
+        <p>For every spec and every bracket, Darkndark Talents looks at the top 50 players and picks the real, complete build that best matches what most of them take. One click creates a loadout and switches to it.</p>
+      </div>
+
+      <div class="talents-grid">
+        <div>
+          <div class="window" role="group" aria-label="Darkndark Talents window, example">
+            <div class="window-title"><b>Darkndark Talents</b><span>Talents · Gear &amp; Stats</span></div>
+            <div class="spec">
+              <div class="icon"><svg><use href="#g-sun"/></svg></div>
+              <div><strong>Retribution Paladin</strong><small>Active: DND Shuffle</small></div>
+            </div>
+            <div class="rows" id="rows"></div>
+            <div class="window-foot">Data: patch 12.1 · murlok.io + raider.io</div>
+          </div>
+          <p class="example-note">Real top-player hero tree shares for Retribution (September 2026). The match percentages are examples.</p>
+        </div>
+
+        <div class="talent-points">
+          <div class="point"><h3>Seven content types</h3><p>Mythic+, Raid, Solo Shuffle (also your 1v1 duel build), Arena 2v2 and 3v3, Blitz and Rated BGs. When the top players split between hero talent trees, you get an alternative build for the second tree too.</p></div>
+          <div class="point"><h3>Switches when you do</h3><p>Enter a dungeon, raid, arena or battleground and it offers the matching build. It stays quiet if that build is already active or a keystone is running.</p></div>
+          <div class="point"><h3>Know how far off you are</h3><p>A match score compares your current talents with each recommended build. You can also save your own talents as the build for any content type.</p></div>
+          <div class="point"><h3>Gear &amp; stat check</h3><p>Your secondary stat mix next to the top players' mix, your item level gap, missing enchants and empty gem sockets, all in one list.</p></div>
+        </div>
+      </div>
+
+      <div class="kb-wrap">
+        <div>
+          <h3 style="font-size:1.6rem;margin-bottom:10px">Bars and keybinds, laid out for you</h3>
+          <p style="color:var(--muted);margin:0 0 22px">After a build change, the build's spells are placed on your visible bars and bound to one consistent template, whichever bar addon you use. Macros and items are never touched, and <b style="color:var(--text)">Undo bars</b> steps back through your last five layouts.</p>
+          <div class="legend">
+            <div class="legend-item"><i class="sw" style="background:#3a1a5e;border-color:var(--epic)"></i><div><b>Rotation</b><span>Keys <code>1–6</code>, <code>R</code>, <code>F</code>, <code>T</code></span></div></div>
+            <div class="legend-item"><i class="sw" style="background:#3a1a5e;border-color:var(--epic);border-style:dotted"></i><div><b>Major cooldowns</b><span><code>Shift + 1–6</code></span></div></div>
+            <div class="legend-item"><i class="sw" style="background:#102546;border-color:var(--rare);border-style:dotted"></i><div><b>Defensives</b><span><code>Ctrl + 1–5</code></span></div></div>
+            <div class="legend-item"><i class="sw" style="background:#4a2400;border-color:var(--legendary)"></i><div><b>Interrupt</b><span><code>G</code></span></div></div>
+            <div class="legend-item"><i class="sw" style="background:#102546;border-color:var(--rare)"></i><div><b>Utility</b><span><code>Z X C V</code>, plus <code>Shift + R F T G</code></span></div></div>
+          </div>
+        </div>
+        <div class="kb-scroll">
+          <div class="kb" role="img" aria-label="Keyboard map: 1 to 6, R, F and T for rotation; G for interrupt; Z, X, C and V for utility; W, A, S and D left free for movement">
+            <div class="kb-row"><div class="cap core">1</div><div class="cap core">2</div><div class="cap core">3</div><div class="cap core">4</div><div class="cap core">5</div><div class="cap core">6</div><div class="cap">7</div></div>
+            <div class="kb-row"><div class="cap">Q</div><div class="cap move">W</div><div class="cap">E</div><div class="cap core">R</div><div class="cap core">T</div><div class="cap">Y</div></div>
+            <div class="kb-row"><div class="cap move">A</div><div class="cap move">S</div><div class="cap move">D</div><div class="cap core">F</div><div class="cap kick">G</div><div class="cap">H</div></div>
+            <div class="kb-row"><div class="cap util">Z</div><div class="cap util">X</div><div class="cap util">C</div><div class="cap util">V</div><div class="cap">B</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= COMMANDS ================= -->
+    <section id="commands" aria-labelledby="commands-title">
+      <div class="section-head">
+        <div><h2 id="commands-title">Commands</h2></div>
+        <p>Everything also lives in Esc → Options → AddOns, and the talent window has a <b style="color:var(--text)">Darkndark</b> button.</p>
+      </div>
+      <div class="cmd-grid">
+        <div class="cmd-card">
+          <h3>Darkndark <small>rotation</small></h3>
+          <div class="cmd"><code>/dnd unlock</code><span>Move and resize panels</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dnd lock</code><span>Lock panels (click-through)</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dnd config</code><span>Open settings</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dnd reset</code><span>Reset positions and sizes</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dnd probe</code><span>Show what combat data is readable right now</span><button class="copy" type="button">Copy</button></div>
+        </div>
+        <div class="cmd-card">
+          <h3>Darkndark Talents <small>builds &amp; gear</small></h3>
+          <div class="cmd"><code>/dndt</code><span>Open or close the window</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dndt gear</code><span>Open the Gear &amp; Stats tab</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dndt check</code><span>Check the current content now</span><button class="copy" type="button">Copy</button></div>
+          <div class="cmd"><code>/dndt reset</code><span>Reset the window position</span><button class="copy" type="button">Copy</button></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= GET ================= -->
+    <section id="get" aria-labelledby="get-title">
+      <div class="section-head">
+        <div><h2 id="get-title">Get the addons</h2></div>
+        <p>Both addons are free and install separately; use one or both. Install them with the CurseForge app, or download the zip and extract it into <code style="font-family:var(--mono);font-size:.86rem;color:var(--text)">World of Warcraft/_retail_/Interface/AddOns</code>.</p>
+      </div>
+      <div class="get">
+        <div class="get-card">
+          <span class="tag tag-epic">Rotation</span>
+          <h3>Darkndark</h3>
+          <p>Next-ability display, cooldown and defensive bars, interrupt helper.</p>
+          <ol><li>Install and log in.</li><li>Type <code style="font-family:var(--mono)">/dnd unlock</code> and place the panels.</li><li>Type <code style="font-family:var(--mono)">/dnd lock</code> and play.</li></ol>
+          <a class="btn btn-primary" href="https://www.curseforge.com/wow/search?search=darkndark" target="_blank" rel="noopener">Find on CurseForge</a>
+        </div>
+        <div class="get-card">
+          <span class="tag tag-legendary">Builds</span>
+          <h3>Darkndark Talents</h3>
+          <p>Top-player builds per content type, one-click apply, bar layout, gear check.</p>
+          <ol><li>Install and open your talents.</li><li>Click <b>Darkndark</b> or type <code style="font-family:var(--mono)">/dndt</code>.</li><li>Pick your content and click <b>Apply</b>.</li></ol>
+          <a class="btn btn-primary" href="https://www.curseforge.com/wow/search?search=darkndark%20talents" target="_blank" rel="noopener">Find on CurseForge</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Made by Darkndark · Retribution Paladin, Alliance</span>
+    <span>Not affiliated with Blizzard Entertainment. World of Warcraft is a trademark of Blizzard Entertainment, Inc.</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  // ---- Talents window rows (real hero-tree shares for Retribution, Sept 2026) ----
+  var rows = [
+    { name: "Mythic+", hero: "Herald of the Sun", share: 100, match: 64 },
+    { name: "Raid", hero: "Herald of the Sun", share: 100, match: 64, note: "(M+ data)" },
+    { name: "Solo Shuffle / 1v1", hero: "Herald of the Sun", share: 80, match: 97, here: true, alt: true },
+    { name: "Arena 2v2", hero: "Herald of the Sun", share: 85, match: 91, alt: true },
+    { name: "Arena 3v3", hero: "Herald of the Sun", share: 75, match: 88, alt: true },
+    { name: "Blitz BG", hero: "Herald of the Sun", share: 95, match: 82, alt: true },
+    { name: "Rated BG / BG", hero: "Herald of the Sun", share: 95, match: 82, alt: true }
+  ];
+  var host = document.getElementById("rows");
+  rows.forEach(function (r, i) {
+    var cls = r.match >= 95 ? "good" : r.match >= 75 ? "mid" : "bad";
+    var div = document.createElement("div");
+    div.className = "row" + (r.here ? " here" : "");
+    div.innerHTML =
+      '<div><div class="row-name">' + r.name + (r.here ? '<span class="here-pill">(You are here)</span>' : "") + '</div>' +
+      '<div class="row-meta"><span class="hero-name">' + r.hero + '</span>' +
+      '<span class="share"><i style="--w:' + r.share + '%"></i>' + r.share + '% of top players</span>' +
+      (r.note ? '<span>' + r.note + '</span>' : "") +
+      '<span class="pill ' + cls + '">' + r.match + '% match</span></div></div>' +
+      '<div class="row-actions">' +
+      '<button class="mini-btn" type="button" id="apply-' + i + '" aria-pressed="' + (r.here ? "true" : "false") + '">' + (r.here ? "Active" : "Apply") + '</button>' +
+      (r.alt ? '<button class="mini-btn alt" type="button" title="Templar build">Alt</button>' : "") +
+      '</div>';
+    host.appendChild(div);
+  });
+  host.addEventListener("click", function (e) {
+    var btn = e.target.closest(".mini-btn:not(.alt)");
+    if (!btn) return;
+    host.querySelectorAll(".mini-btn:not(.alt)").forEach(function (b) { b.setAttribute("aria-pressed", "false"); b.textContent = "Apply"; });
+    btn.setAttribute("aria-pressed", "true");
+    btn.textContent = "Active";
+  });
+
+  // ---- Copy buttons ----
+  document.querySelectorAll(".copy").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var text = b.parentElement.querySelector("code").textContent;
+      var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy"; }, 1400); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { select(b.parentElement.querySelector("code")); });
+      } else {
+        select(b.parentElement.querySelector("code"));
+      }
+    });
+  });
+  function select(el) {
+    var r = document.createRange(); r.selectNodeContents(el);
+    var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+  }
+
+  // ---- HUD animation: the queue advances every GCD ----
+  var seq = [
+    { g: "g-hammer", k: "2", n: "Blade of Justice", c: ["#ffcf4a", "#7a4b0c"] },
+    { g: "g-sword", k: "E", n: "Crusader Strike", c: ["#ffe08a", "#80560c"] },
+    { g: "g-wave", k: "4", n: "Divine Storm", c: ["#ffd76b", "#6e3b0a"] },
+    { g: "g-bolt", k: "5", n: "Judgment", c: ["#ffe9a8", "#8a6412"] },
+    { g: "g-sun", k: "3", n: "Wake of Ashes", c: ["#ff9a3d", "#6b2a00"] }
+  ];
+  var ids = ["hud-main", "hud-q1", "hud-q2"];
+  var pos = 0;
+  function paint() {
+    ids.forEach(function (id, i) {
+      var s = seq[(pos + i) % seq.length];
+      var el = document.getElementById(id);
+      el.style.setProperty("--c1", s.c[0]);
+      el.style.setProperty("--c2", s.c[1]);
+      el.querySelector("use").setAttribute("href", "#" + s.g);
+      el.querySelector(".key").textContent = s.k;
+    });
+    var cur = seq[pos % seq.length];
+    document.getElementById("hud-name").textContent = "Next: " + cur.n;
+    var main = document.getElementById("hud-main");
+    main.classList.toggle("glow", cur.g === "g-wave");
+  }
+  paint();
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!reduce) {
+    var swipe = document.getElementById("hud-swipe");
+    var gcd = 1500, t0 = performance.now();
+    (function tick(now) {
+      var p = (now - t0) / gcd;
+      if (p >= 1) { pos++; paint(); t0 = now; p = 0; }
+      swipe.style.setProperty("--p", Math.round((1 - p) * 100 * (p < 1 ? 1 : 0)) + "%");
+      requestAnimationFrame(tick);
+    })(t0);
+  }
+})();
+</script>
+</body>
+</html>

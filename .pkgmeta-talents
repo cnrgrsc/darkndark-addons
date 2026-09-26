@@ -1,0 +1,22 @@
+package-as: DarkndarkTalents
+
+# DarkndarkTalents lives in its own subfolder; lift it to the zip root.
+move-folders:
+  DarkndarkTalents/DarkndarkTalents: DarkndarkTalents
+
+ignore:
+  - PLAN.md
+  - install.ps1
+  - .github
+  - tests
+  - tools
+  - docs
+  - Darkndark
+  - .gitignore
+  - README.md
+  - README-talents.md
+  - .pkgmeta
+
+manual-changelog: CHANGELOG-talents.md
+
+enable-nolib-creation: no

@@ -1,0 +1,38 @@
+# Packages the addon and uploads it to CurseForge when a version tag is pushed.
+# Setup (once):
+#   1. Create two CurseForge projects and add "## X-Curse-Project-ID: <id>" to
+#      Darkndark/Darkndark.toc and DarkndarkTalents/DarkndarkTalents.toc
+#   2. GitHub repo > Settings > Secrets > Actions: add CF_API_KEY
+#      (https://legacy.curseforge.com/account/api-tokens)
+#   3. Release: git tag v0.2.0 && git push --tags
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      CF_API_KEY: ${{ secrets.CF_API_KEY }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Mock tests
+        working-directory: tests
+        run: npm install && npm test
+
+      - name: Package Darkndark
+        uses: BigWigsMods/packager@v2
+
+      - name: Package DarkndarkTalents
+        uses: BigWigsMods/packager@v2
+        with:
+          args: -m .pkgmeta-talents
